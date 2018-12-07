@@ -31,7 +31,7 @@ class Scanner(object):
 
         # Loads airodump with interface/channel/etc from Configuration
         try:
-            with Airodump() as airodump:
+            with Airodump(skip_wps = Configuration.no_wps) as airodump:
                 # Loop until interrupted (Ctrl+C)
                 scan_start_time = time()
 
