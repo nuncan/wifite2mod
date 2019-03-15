@@ -43,7 +43,7 @@ class Scanner(object):
 
         # Loads airodump with interface/channel/etc from Configuration
         try:
-            with Airodump(skip_wps = Configuration.no_wps) as airodump:
+            with Airodump() as airodump:
                 # Loop until interrupted (Ctrl+C)
                 scan_start_time = time()
                 self.airodump_iface = airodump.interface
@@ -142,7 +142,7 @@ class Scanner(object):
             if bssid and target.bssid and bssid.lower() == target.bssid.lower():
                 self.target = target
                 break
-            if essid and target.essid and essid == target.essid:
+            if essid and target.essid and essid.lower() == target.essid.lower():
                 self.target = target
                 break
 
@@ -189,12 +189,6 @@ class Scanner(object):
             Color.p('              BSSID')
         Color.pl('   CH  ENCR   POWER  WPS?  CLIENT')
 
-        if Configuration.show_manufacturers:
-            Color.p('           MANUFACTURER')
-
-
-        Color.pl('   CH   ENCR   POWER  WPS?  CLIENT')
-
         # Second row: separator
         Color.p('   ---')
         Color.p('  -------------------------')
@@ -202,20 +196,11 @@ class Scanner(object):
             Color.p('  -----------------')
         Color.pl('  ---  -----  -----  ----  ------{W}')
 
-        if Configuration.show_manufacturers:
-            Color.p('  ---------------------')
-
-        Color.pl('  ---  -----  -----  ----  ------{W}')
-
         # Remaining rows: targets
         for idx, target in enumerate(self.targets, start=1):
             Color.clear_entire_line()
             Color.p('   {G}%s  ' % str(idx).rjust(3))
-            Color.pl(target.to_str(
-                    Configuration.show_bssids,
-                    Configuration.show_manufacturers
-                    )
-                )
+            Color.pl(target.to_str(Configuration.show_bssids))
 
     @staticmethod
     def get_terminal_height():
