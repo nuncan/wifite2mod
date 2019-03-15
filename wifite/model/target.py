@@ -158,7 +158,7 @@ class Target(object):
         if bssid_multicast.match(self.bssid):
             raise Exception('Ignoring target with Multicast BSSID (%s)' % self.bssid)
 
-    def to_str(self, show_bssid=False):
+    def to_str(self, show_bssid=False, show_manufacturer=False):
         '''
             *Colored* string representation of this Target.
             Specifically formatted for the 'scanning' table view.
@@ -187,6 +187,20 @@ class Target(object):
             bssid = Color.s('{O}%s  ' % self.bssid)
         else:
             bssid = ''
+
+        if show_manufacturer:
+            oui = ''.join(self.bssid.split(':')[:3])
+            self.manufacturer = Configuration.manufacturers.get(oui,"")
+
+            max_oui_len = 27
+            manufacturer = Color.s('{W}%s  ' % self.manufacturer)
+            # Trim manufacturer name if needed
+            if len(manufacturer) > max_oui_len:
+                manufacturer = manufacturer[0:max_oui_len-3] + '...'
+            else:
+                manufacturer = manufacturer.rjust(max_oui_len)
+        else:
+            manufacturer = ''
 
         channel_color = '{G}'
         if int(self.channel) > 14:
@@ -228,8 +242,8 @@ class Target(object):
         if len(self.clients) > 0:
             clients = Color.s('{G}  ' + str(len(self.clients)))
 
-        result = '%s  %s%s  %s  %s  %s  %s' % (
-                essid, bssid, channel, encryption, power, wps, clients)
+        result = '%s  %s%s%s  %s  %s  %s  %s' % (
+                essid, bssid, manufacturer, channel, encryption, power, wps, clients)
         result += Color.s('{W}')
         return result
 
