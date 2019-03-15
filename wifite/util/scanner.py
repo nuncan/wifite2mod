@@ -3,7 +3,6 @@
 
 from ..util.color import Color
 from ..tools.airodump import Airodump
-from ..tools.airmon import Airmon
 from ..util.input import raw_input, xrange
 from ..model.target import Target, WPSState, ArchivedTarget
 from ..config import Configuration
@@ -23,15 +22,6 @@ class Scanner(object):
         self.targets = []
         self.target = None  # Target specified by user (based on ESSID/BSSID)
         self.err_msg = None
-        self.airodump_iface = None
-
-    def check_running(self, airodump):
-        exit_code = airodump.pid.poll()
-        if exit_code is not None:
-            self.err_msg = "{!} {O}Airodump crashed with status code {R}%s{O}." % exit_code
-            self.err_msg += " Airodump was started with: {C}%s{W}" % airodump.command
-            return False  # Airodump process died
-        return True
 
     def find_targets(self):
         '''
@@ -43,13 +33,12 @@ class Scanner(object):
 
         # Loads airodump with interface/channel/etc from Configuration
         try:
-            with Airodump(skip_wps = Configuration.no_wps) as airodump:
+            with Airodump() as airodump:
                 # Loop until interrupted (Ctrl+C)
                 scan_start_time = time()
-                self.airodump_iface = airodump.interface
 
                 while True:
-                    if not self.check_running(airodump):
+                    if airodump.pid.poll() is not None:
                         return True  # Airodump process died
 
                     self.targets = airodump.get_targets(old_targets=self.targets,
@@ -58,7 +47,7 @@ class Scanner(object):
                     if self.found_target():
                         return True  # We found the target we want
 
-                    if not self.check_running(airodump):
+                    if airodump.pid.poll() is not None:
                         return True  # Airodump process died
 
                     self.print_targets()
@@ -142,7 +131,7 @@ class Scanner(object):
             if bssid and target.bssid and bssid.lower() == target.bssid.lower():
                 self.target = target
                 break
-            if essid and target.essid and essid == target.essid:
+            if essid and target.essid and essid.lower() == target.essid.lower():
                 self.target = target
                 break
 
@@ -189,12 +178,6 @@ class Scanner(object):
             Color.p('              BSSID')
         Color.pl('   CH  ENCR   POWER  WPS?  CLIENT')
 
-        if Configuration.show_manufacturers:
-            Color.p('           MANUFACTURER')
-
-
-        Color.pl('   CH   ENCR   POWER  WPS?  CLIENT')
-
         # Second row: separator
         Color.p('   ---')
         Color.p('  -------------------------')
@@ -202,20 +185,11 @@ class Scanner(object):
             Color.p('  -----------------')
         Color.pl('  ---  -----  -----  ----  ------{W}')
 
-        if Configuration.show_manufacturers:
-            Color.p('  ---------------------')
-
-        Color.pl('  ---  -----  -----  ----  ------{W}')
-
         # Remaining rows: targets
         for idx, target in enumerate(self.targets, start=1):
             Color.clear_entire_line()
             Color.p('   {G}%s  ' % str(idx).rjust(3))
-            Color.pl(target.to_str(
-                    Configuration.show_bssids,
-                    Configuration.show_manufacturers
-                    )
-                )
+            Color.pl(target.to_str(Configuration.show_bssids))
 
     @staticmethod
     def get_terminal_height():
@@ -244,20 +218,14 @@ class Scanner(object):
         if len(self.targets) == 0:
             if self.err_msg is not None:
                 Color.pl(self.err_msg)
-                self.err_msg = None
 
-            message = "{!} {O}No targets found. You may need to wait longer or you " \
-                      "may have issues with your wifi card.\n"
-            if self.airodump_iface is not None:
-                info = Airmon.get_iface_info(self.airodump_iface)
-                message += "{!} {O}Airodump was ran on:\n"
-                message += "\t  iface - {G}%s{O}\n" % info.interface
-                message += "\t driver - {G}%s{O}\n" % info.driver
-                message += "\tchipset - {G}%s{O}\n" % info.chipset
-            message += "{!} {O}Check if your chipset/driver supports monitor mode{O}: {C}%s{W}" % Airmon.chipset_table
-
-            Color.pl(message)
-            return []
+            # TODO Print a more-helpful reason for failure.
+            # 1. Link to wireless drivers wiki,
+            # 2. How to check if your device supporst monitor mode,
+            # 3. Provide airodump-ng command being executed.
+            raise Exception('No targets found.'
+                + ' You may need to wait longer,'
+                + ' or you may have issues with your wifi card')
 
         # Return all targets if user specified a wait time ('pillage').
         # A scan time is always set if run in infinite mode
@@ -270,7 +238,6 @@ class Scanner(object):
 
         if self.err_msg is not None:
             Color.pl(self.err_msg)
-            self.err_msg = None
 
         input_str  = '{+} select target(s)'
         input_str += ' ({G}1-%d{W})' % len(self.targets)
