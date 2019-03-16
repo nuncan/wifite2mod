@@ -14,6 +14,24 @@ Wifite is designed to use all known methods for retrieving the password of a wir
 
 Run wifite, select your targets, and Wifite will automatically start trying to capture or crack the password.
 
+Credits
+=======
+
+*  derv82
+*  kimocoder
+*  deix
+*  WhiteOnBlackCode
+*  Niller303
+*  examin
+*  rhertzog
+*  ChunshengZhao
+*  EdwardBetts
+*  schoonc
+*  random-robbie
+*  ritiek
+*  viniciusmarangoni
+*  goll
+
 Supported Operating Systems
 ---------------------------
 Wifite is designed specifically for the latest version of [**Kali** Linux](https://www.kali.org/). [ParrotSec](https://www.parrotsec.org/) is also supported.
