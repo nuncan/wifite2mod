@@ -5,7 +5,7 @@ from .dependency import Dependency
 from .ifconfig import Ifconfig
 from .iwconfig import Iwconfig
 from ..util.process import Process
-from ..util.colors import Color
+from ..util.color import Color
 from ..util.input import raw_input
 from ..config import Configuration
 

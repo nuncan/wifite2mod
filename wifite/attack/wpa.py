@@ -6,7 +6,7 @@ from ..tools.aircrack import Aircrack
 from ..tools.airodump import Airodump
 from ..tools.aireplay import Aireplay
 from ..config import Configuration
-from ..util.colors import Color
+from ..util.color import Color
 from ..util.process import Process
 from ..util.timer import Timer
 from ..model.handshake import Handshake

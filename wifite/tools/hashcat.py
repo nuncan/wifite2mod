@@ -4,7 +4,7 @@
 from .dependency import Dependency
 from ..config import Configuration
 from ..util.process import Process
-from ..util.colors import Color
+from ..util.color import Color
 
 import os
 
@@ -112,9 +112,8 @@ class HcxDumpTool(Dependency):
         command = [
             'hcxdumptool',
             '-i', Configuration.interface,
-            '--filterlist=', filterlist,
-            '--filtermode=', '2',
-            '--enable_status=', '3',
+            '--filterlist', filterlist,
+            '--filtermode', '2',
             '-c', str(target.channel),
             '-o', pcapng_file
         ]

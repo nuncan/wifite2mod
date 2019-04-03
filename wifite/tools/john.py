@@ -3,7 +3,7 @@
 
 from .dependency import Dependency
 from ..config import Configuration
-from ..util.colors import Color
+from ..util.color import Color
 from ..util.process import Process
 from ..tools.hashcat import HcxPcapTool
 

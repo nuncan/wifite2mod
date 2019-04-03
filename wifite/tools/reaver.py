@@ -7,7 +7,7 @@ from .bully import Bully # for PSK retrieval
 from ..model.attack import Attack
 from ..config import Configuration
 from ..model.wps_result import CrackResultWPS
-from ..util.colors import Color
+from ..util.color import Color
 from ..util.process import Process
 from ..util.timer import Timer
 

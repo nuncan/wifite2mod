@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from ..util.colors import Color
+from ..util.color import Color
 from .result import CrackResult
 
 import time

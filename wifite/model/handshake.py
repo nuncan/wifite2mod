@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from ..util.process import Process
-from ..util.colors import Color
+from ..util.color import Color
 from ..tools.tshark import Tshark
 from ..tools.pyrit import Pyrit
 

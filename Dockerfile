@@ -9,19 +9,15 @@ RUN echo "deb-src http://deb.debian.org/debian jessie main" >> /etc/apt/sources.
 RUN apt-get update && apt-get upgrade -y
 RUN apt-get install ca-certificates gcc openssl make kmod nano wget p7zip build-essential libsqlite3-dev libpcap0.8-dev libpcap-dev sqlite3 pkg-config libnl-genl-3-dev libssl-dev net-tools iw ethtool usbutils pciutils wireless-tools git curl wget unzip macchanger pyrit tshark -y
 RUN apt-get build-dep aircrack-ng -y
-RUN apt-get install hcxdumptool hcxtools -y
 
-# Workdir /
-WORKDIR /
+
 
 #Install Aircrack from Source
-RUN apt-get install build-essential autoconf automake libtool pkg-config libnl-3-dev libnl-genl-3-dev libssl-dev ethtool shtool rfkill zlib1g-dev libpcap-dev libsqlite3-dev libpcre3-dev libhwloc-dev libcmocka-dev hostapd wpasupplicant tcpdump screen iw -y
-RUN wget https://github.com/aircrack-ng/aircrack-ng/archive/1.5.2.tar.gz aircrack-ng-1.5.2.tar.gz
+RUN wget https://download.aircrack-ng.org/aircrack-ng-1.5.2.tar.gz
 RUN tar xzvf aircrack-ng-1.5.2.tar.gz
-RUN apt-get update && apt-get upgrade -y
 WORKDIR /aircrack-ng-1.5.2/
 RUN autoreconf -i
-RUN ./configure --with-experimental --with-ext-scripts
+RUN ./configure --with-experimental
 RUN make
 RUN make install
 RUN airodump-ng-oui-update
@@ -32,6 +28,26 @@ WORKDIR /
 # Install wps-pixie
 RUN git clone https://github.com/wiire/pixiewps
 WORKDIR /pixiewps/
+RUN make
+RUN make install
+
+
+# Workdir /
+WORKDIR /
+
+
+# Install hcxdump
+RUN git clone https://github.com/ZerBea/hcxdumptool.git
+WORKDIR /hcxdumptool/
+RUN make
+RUN make install
+
+# Workdir /
+WORKDIR /
+
+# Install hcxtools
+RUN git clone https://github.com/ZerBea/hcxtools.git
+WORKDIR /hcxtools/
 RUN make
 RUN make install
 
@@ -54,14 +70,14 @@ RUN mkdir /hashcat
 
 #Install and configure hashcat: it's either the latest release or in legacy files
 RUN cd /hashcat && \
-    wget --no-check-certificate https://hashcat.net/files/hashcat-${HASHCAT_VERSION}.7z && \
-    7zr x hashcat-${HASHCAT_VERSION}.7z && \
-    rm hashcat-${HASHCAT_VERSION}.7z
+    wget --no-check-certificate https://hashcat.net/files/${HASHCAT_VERSION}.7z && \
+    7zr x ${HASHCAT_VERSION}.7z && \
+    rm ${HASHCAT_VERSION}.7z
 
 RUN cd /hashcat && \
-    wget https://github.com/hashcat/hashcat-utils/releases/download/v1.9/hashcat-utils-1.9.7z && \
-    7zr x hashcat-utils-1.9.7z && \
-    rm hashcat-utils-1.9.7z
+    wget https://github.com/hashcat/hashcat-utils/releases/download/v${HASHCAT_UTILS_VERSION}/hashcat-utils-${HASHCAT_UTILS_VERSION}.7z && \
+    7zr x hashcat-utils-${HASHCAT_UTILS_VERSION}.7z && \
+    rm hashcat-utils-${HASHCAT_UTILS_VERSION}.7z
 
 #Add link for binary
 RUN ln -s /hashcat/${HASHCAT_VERSION}/hashcat64.bin /usr/bin/hashcat
@@ -71,10 +87,11 @@ RUN ln -s /hashcat/hashcat-utils-${HASHCAT_UTILS_VERSION}/bin/cap2hccapx.bin /us
 WORKDIR /
 
 
-# Install reaver #Introduced null pin option -p
-RUN apt -y install build-essential libpcap-dev aircrack-ng pixiewps
-RUN git clone https://github.com/t6x/reaver-wps-fork-t6x.git
-WORKDIR reaver-wps-fork-t6x/src/
+
+
+# Install reaver
+RUN git clone https://github.com/gabrielrcouto/reaver-wps.git
+WORKDIR /reaver-wps/src/
 RUN ./configure
 RUN make
 RUN make install
@@ -91,8 +108,8 @@ RUN make
 WORKDIR /
 
 # Install wifite
-RUN git clone https://github.com/nuncan/wifite2mod.git
-RUN chmod -R 777 /wifite2mod/
-WORKDIR /wifite2mod/
+RUN git clone https://github.com/derv82/wifite2.git
+RUN chmod -R 777 /wifite2/
+WORKDIR /wifite2/
 RUN apt-get install rfkill -y
 ENTRYPOINT ["/bin/bash"]

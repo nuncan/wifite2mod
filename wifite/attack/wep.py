@@ -7,7 +7,7 @@ from ..tools.aireplay import Aireplay, WEPAttackType
 from ..tools.aircrack import Aircrack
 from ..tools.ifconfig import Ifconfig
 from ..config import Configuration
-from ..util.colors import Color
+from ..util.color import Color
 from ..util.input import raw_input
 from ..model.wep_result import CrackResultWEP
 
