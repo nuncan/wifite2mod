@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from ..model.attack import Attack
-from ..util.color import Color
+from ..util.colors import Color
 from ..util.process import Process
 from ..config import Configuration
 from ..tools.bully import Bully

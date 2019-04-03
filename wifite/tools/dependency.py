@@ -22,7 +22,7 @@ class Dependency(object):
 
     @classmethod
     def run_dependency_check(cls):
-        from ..util.color import Color
+        from ..util.colors import Color
 
         from .airmon import Airmon
         from .airodump import Airodump
@@ -63,7 +63,7 @@ class Dependency(object):
 
     @classmethod
     def fails_dependency_check(cls):
-        from ..util.color import Color
+        from ..util.colors import Color
         from ..util.process import Process
 
         if Process.exists(cls.dependency_name):

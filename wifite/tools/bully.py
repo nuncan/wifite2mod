@@ -5,7 +5,7 @@ from .dependency import Dependency
 from .airodump import Airodump
 from ..model.attack import Attack
 from ..model.wps_result import CrackResultWPS
-from ..util.color import Color
+from ..util.colors import Color
 from ..util.timer import Timer
 from ..util.process import Process
 from ..config import Configuration

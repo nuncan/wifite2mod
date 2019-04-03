@@ -7,7 +7,7 @@ import os
 
 from subprocess import Popen, PIPE
 
-from ..util.color import Color
+from ..util.colors import Color
 from ..config import Configuration
 
 

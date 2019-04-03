@@ -4,7 +4,7 @@
 from ..model.attack import Attack
 from ..config import Configuration
 from ..tools.hashcat import HcxDumpTool, HcxPcapTool, Hashcat
-from ..util.color import Color
+from ..util.colors import Color
 from ..util.timer import Timer
 from ..model.pmkid_result import CrackResultPMKID
 

@@ -6,7 +6,7 @@ from .wpa import AttackWPA
 from .wps import AttackWPS
 from .pmkid import AttackPMKID
 from ..config import Configuration
-from ..util.color import Color
+from ..util.colors import Color
 
 class AttackAll(object):
 
@@ -50,11 +50,7 @@ class AttackAll(object):
 
         attacks = []
 
-        if Configuration.use_eviltwin:
-            # TODO: EvilTwin attack
-            pass
-
-        elif 'WEP' in target.encryption:
+        if 'WEP' in target.encryption:
             attacks.append(AttackWEP(target))
 
         elif 'WPA' in target.encryption:

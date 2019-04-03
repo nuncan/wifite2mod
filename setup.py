@@ -16,24 +16,23 @@ setup(
         'wifite/util',
     ],
     data_files=[
-        ('share/dict', ['wordlist-top4800-probable.txt'])
+        ('share/dict', ['wordlist-top4800-probable.txt'],
+         'share/dict', ['ieee-oui.txt'])
     ],
-    entry_points={
-        'console_scripts': [
-            'wifite = wifite.wifite:entry_point'
-        ]
-    },
+    entry_points=dict(console_scripts=[
+        'wifite = wifite.wifite:entry_point'
+    ]),
     license='GNU GPLv2',
     scripts=['bin/wifite'],
-    description='Wireless Network Auditor for Linux',
-    #long_description=open('README.md').read(),
-    long_description='''Wireless Network Auditor for Linux.
-
-    Cracks WEP, WPA, and WPS encrypted networks.
-
-    Depends on Aircrack-ng Suite, Tshark (from Wireshark), and various other external tools.''',
-    classifiers = [
-        "Programming Language :: Python :: 2.7",
-        "Programming Language :: Python :: 3"
+    description="Wireless Network Auditor for Linux",
+    # long_description=open('README.md').read(),
+    long_description=('Wireless Network Auditor for Linux.\n'
+                      '\n'
+                      '    Cracks WEP, WPA, and WPS encrypted networks.\n'
+                      '\n'
+                      '    Depends on Aircrack-ng Suite, Tshark (from Wireshark), and various other external tools.'),
+    classifiers=[
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3'
     ]
 )

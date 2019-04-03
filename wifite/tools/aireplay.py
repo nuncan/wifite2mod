@@ -111,7 +111,7 @@ class Aireplay(Thread, Dependency):
                 fid.truncate()
 
             if Configuration.verbose > 1 and lines.strip() != '':
-                from ..util.color import Color
+                from ..util.colors import Color
                 Color.pl('\n{P} [?] aireplay output:\n     %s{W}' % lines.strip().replace('\n', '\n     '))
 
             for line in lines.split('\n'):
@@ -379,7 +379,7 @@ class Aireplay(Thread, Dependency):
         if out.strip() == 'Wrote packet to: %s' % forged_file:
             return forged_file
         else:
-            from ..util.color import Color
+            from ..util.colors import Color
             Color.pl('{!} {R}failed to forge packet from .xor file{W}')
             Color.pl('output:\n"%s"' % out)
             return None

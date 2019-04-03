@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from ..util.color import Color
+from ..util.colors import Color
 from ..tools.airodump import Airodump
 from ..util.input import raw_input, xrange
 from ..model.target import Target, WPSState, ArchivedTarget
@@ -229,7 +229,7 @@ class Scanner(object):
 
         # Return all targets if user specified a wait time ('pillage').
         # A scan time is always set if run in infinite mode
-        if Configuration.scan_time > 0:
+        if Configuration.scan_time >= 0:
             return self.targets
 
         # Ask user for targets.
@@ -239,7 +239,7 @@ class Scanner(object):
         if self.err_msg is not None:
             Color.pl(self.err_msg)
 
-        input_str  = '{+} select target(s)'
+        input_str = '{+} select target(s)'
         input_str += ' ({G}1-%d{W})' % len(self.targets)
         input_str += ' separated by commas, dashes'
         input_str += ' or {G}all{W}: '

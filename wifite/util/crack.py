@@ -6,7 +6,7 @@ from ..model.handshake import Handshake
 from ..model.wpa_result import CrackResultWPA
 from ..model.pmkid_result import CrackResultPMKID
 from ..util.process import Process
-from ..util.color import Color
+from ..util.colors import Color
 from ..util.input import raw_input
 from ..tools.aircrack import Aircrack
 from ..tools.cowpatty import Cowpatty
@@ -81,6 +81,7 @@ class CrackHelper:
 
         if all_pmkid:
             Color.pl('{!} {O}Note: PMKID hashes can only be cracked using {C}hashcat{W}')
+            Color.pl('{!} {O}Note: ... and soon to be {C}aircrack-ng{W}')
             tool_name = 'hashcat'
         else:
             Color.p('\n{+} Enter the {C}cracking tool{W} to use ({C}%s{W}): {G}' % (
@@ -207,7 +208,8 @@ class CrackHelper:
     def get_user_selection(cls, handshakes):
         cls.print_handshakes(handshakes)
 
-        Color.p('{+} Select handshake(s) to crack ({G}%d{W}-{G}%d{W}, select multiple with {C},{W} or {C}-{W} or {C}all{W}): {G}' % (1, len(handshakes)))
+        Color.p('{+} Select handshake(s) to crack ({G}%d{W}-{G}%d{W}, select multiple with {C},{W} or {C}-{W} or {'
+                'C}all{W}): {G}' % (1, len(handshakes)))
         choices = raw_input()
 
         selection = []

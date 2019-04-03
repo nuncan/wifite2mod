@@ -5,6 +5,7 @@ import re
 
 from .dependency import Dependency
 
+
 class Ifconfig(Dependency):
     dependency_required = True
     dependency_name = 'ifconfig'
@@ -12,7 +13,7 @@ class Ifconfig(Dependency):
 
     @classmethod
     def up(cls, interface, args=[]):
-        '''Put interface up'''
+        """Put interface up"""
         from ..util.process import Process
 
         command = ['ifconfig', interface]
@@ -27,17 +28,15 @@ class Ifconfig(Dependency):
         if pid.poll() != 0:
             raise Exception('Error putting interface %s up:\n%s\n%s' % (interface, pid.stdout(), pid.stderr()))
 
-
     @classmethod
     def down(cls, interface):
-        '''Put interface down'''
+        """Put interface down"""
         from ..util.process import Process
 
         pid = Process(['ifconfig', interface, 'down'])
         pid.wait()
         if pid.poll() != 0:
             raise Exception('Error putting interface %s down:\n%s\n%s' % (interface, pid.stdout(), pid.stderr()))
-
 
     @classmethod
     def get_mac(cls, interface):
@@ -58,4 +57,3 @@ class Ifconfig(Dependency):
             return match.group(1)
 
         raise Exception('Could not find the mac address for %s' % interface)
-

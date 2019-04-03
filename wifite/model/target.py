@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from ..util.color import Color
+from ..util.colors import Color
 from ..config import Configuration
 
 import re
